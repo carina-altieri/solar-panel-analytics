@@ -73,7 +73,7 @@ cur.execute(create_table)
 for i, df_coluna in df.iterrows():
     cur.execute(
         ''' 
-        INSERT INTO UPXIII.monitoramento_solar(
+        INSERT INTO upx.monitoramento_solar(
         data,
         hora,
         irradiacao_solar,
