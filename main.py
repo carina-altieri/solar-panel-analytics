@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta 
+from db import get_connection
 
 # Gerando histórico de dados dos últimos 30 dias, a cada 15 min
 
@@ -13,10 +14,8 @@ datas_e_horarios = pd.date_range(start=data_antiga, end=data_recente, freq='15mi
 df = pd.DataFrame({'DataHora': datas_e_horarios})
 
 
-df['Hora'] = df['DataHora'].dt.hour
-horas = df['Hora']
-
-hora_formatada = datetime.now().strftime('%H:%M:%S')
+df['Hora'] = df['DataHora'].dt.time
+hora = df['Hora']
 
 df['Data'] = df['DataHora'].dt.date
 datas = df['Data'] 
@@ -29,15 +28,12 @@ l_status_painel = []
 amanhecer = 6
 anoitecer = 18
 
-for hora in horas:
-    if hora < anoitecer and hora >= amanhecer:
+for h in hora:
+    if h.hour < anoitecer and h.hour >= amanhecer:
         irradiacao = np.random.randint(100, 1000)
     else:
         irradiacao = 0
     l_irradiacao_solar.append(irradiacao)
-
-    if irradiacao < 0 or irradiacao > 1000:
-        raise ValueError("Erro")
 
     if irradiacao > 0:
         l_temperatura_painel.append(np.random.randint(40, 70))
@@ -54,3 +50,50 @@ df['IrradiacaoSolar'] = l_irradiacao_solar
 df['TempPainel'] = l_temperatura_painel
 df['TempAmbiente'] = l_temperatura_ambiente
 df['StatusPainel'] = l_status_painel
+
+
+# inserindo dados no MySQL
+
+cnx = get_connection()
+cur = cnx.cursor()
+
+create_table = """
+CREATE TABLE IF NOT EXISTS monitoramento_solar (
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    data DATE NOT NULL, 
+    hora TIME NOT NULL,
+    irradiacao_solar FLOAT, 
+    temp_painel FLOAT, 
+    temp_ambiente FLOAT, 
+    status_painel VARCHAR(50)
+)
+"""
+cur.execute(create_table)
+
+for i, df_coluna in df.iterrows():
+    cur.execute(
+        ''' 
+        INSERT INTO UPXIII.monitoramento_solar(
+        data,
+        hora,
+        irradiacao_solar,
+        temp_painel,
+        temp_ambiente,
+        status_painel
+    ) 
+        values (%s,%s,%s,%s,%s,%s)  
+        ''',
+        (
+            df_coluna['Data'],
+            df_coluna['Hora'],
+            df_coluna['IrradiacaoSolar'],
+            df_coluna['TempPainel'],
+            df_coluna['TempAmbiente'],
+            df_coluna['StatusPainel']
+        )
+    ) 
+
+cnx.commit()
+
+cur.close()
+cnx.close()
