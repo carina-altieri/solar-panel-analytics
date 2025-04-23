@@ -7,4 +7,4 @@ Este projeto simula a coleta de dados de painéis solares ao longo de 30 dias, i
 
 🚧 Projeto em desenvolvimento
 ✅ Simulação de dados concluída
-⏳ Próximas etapas: análises estatísticas, visualizações e dashboard interativo
+⏳ Próximas etapas: análises estatísticas, visualizações e dashboard interativo.
