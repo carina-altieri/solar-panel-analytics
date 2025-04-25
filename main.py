@@ -13,12 +13,11 @@ datas_e_horarios = pd.date_range(start=data_antiga, end=data_recente, freq='15mi
 
 df = pd.DataFrame({'DataHora': datas_e_horarios})
 
+df['hora'] = df['DataHora'].dt.floor('S').dt.time
+hora = df['hora']
 
-df['Hora'] = df['DataHora'].dt.time
-hora = df['Hora']
-
-df['Data'] = df['DataHora'].dt.date
-datas = df['Data'] 
+df['data'] = df['DataHora'].dt.date
+datas = df['data'] 
 
 l_irradiacao_solar = []
 l_temperatura_painel = []
@@ -38,7 +37,7 @@ for h in hora:
     if irradiacao > 0:
         l_temperatura_painel.append(np.random.randint(40, 70))
         l_temperatura_ambiente.append(np.random.randint(24, 35))
-        l_status_painel.append(np.random.choice(["Operando...", "Falha"], p=[0.9, 0.1]))
+        l_status_painel.append(np.random.choice(["Operando...", "Falha"], p=[0.7, 0.3]))
     else:
         l_temperatura_painel.append(np.random.randint(20, 30))
         l_temperatura_ambiente.append(np.random.randint(13, 24))
@@ -46,10 +45,12 @@ for h in hora:
 
 df.drop('DataHora', axis=1, inplace=True)
 
-df['IrradiacaoSolar'] = l_irradiacao_solar
-df['TempPainel'] = l_temperatura_painel
-df['TempAmbiente'] = l_temperatura_ambiente
-df['StatusPainel'] = l_status_painel
+df['irradiacao_solar'] = l_irradiacao_solar
+df['temp_painel'] = l_temperatura_painel
+df['temp_ambiente'] = l_temperatura_ambiente
+df['status_painel'] = l_status_painel
+
+print(df.head(5))
 
 
 # inserindo dados no MySQL
@@ -84,12 +85,12 @@ for i, df_coluna in df.iterrows():
         values (%s,%s,%s,%s,%s,%s)  
         ''',
         (
-            df_coluna['Data'],
-            df_coluna['Hora'],
-            df_coluna['IrradiacaoSolar'],
-            df_coluna['TempPainel'],
-            df_coluna['TempAmbiente'],
-            df_coluna['StatusPainel']
+            df_coluna['data'],
+            df_coluna['hora'],
+            df_coluna['irradiacao_solar'],
+            df_coluna['temp_painel'],
+            df_coluna['temp_ambiente'],
+            df_coluna['status_painel']
         )
     ) 
 
