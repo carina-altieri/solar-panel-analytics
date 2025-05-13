@@ -54,9 +54,13 @@ df['temp_painel'] = l_temperatura_painel
 df['temp_ambiente'] = l_temperatura_ambiente
 df['status_painel'] = l_status_painel
 
+# exportando os dados para .csv
+
+df.to_csv('dados_3_meses', index=False, sep=";")
+
 #  inserindo dados no MySQL
 
-cnx = get_connection()
+cnx = get_connection(database='upx')
 cursor = cnx.cursor()
 
 for i, df_coluna in df.iterrows():
@@ -86,7 +90,3 @@ cnx.commit()
 
 cursor.close()
 cnx.close()
-
-# exportando os dados para .csv
-
-df.to_csv('dados_3_meses', index=False)
