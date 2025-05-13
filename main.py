@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from datetime import datetime, timedelta 
 from db_connection import get_connection
 import criar_banco
@@ -41,7 +40,7 @@ for h in hora:
     if irradiacao > 0:
         l_temperatura_painel.append(np.random.randint(40, 70))
         l_temperatura_ambiente.append(np.random.randint(24, 35))
-        l_status_painel.append(np.random.choice(["Operando...", "Falha"], p=[0.8, 0.2]))
+        l_status_painel.append(np.random.choice(["Operando...", "Falha"], p=[0.9, 0.1]))
     else:
         l_temperatura_painel.append(np.random.randint(20, 30))
         l_temperatura_ambiente.append(np.random.randint(13, 24))
