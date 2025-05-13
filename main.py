@@ -10,14 +10,14 @@ criar_banco.criar_bd()
 # Gerando histórico de dados dos últimos 30 dias, a cada 15 min
 
 data_recente = datetime.now() 
-dias_para_subtrair = timedelta(days=29) 
+dias_para_subtrair = timedelta(days=30) 
 data_antiga = data_recente - dias_para_subtrair 
 
 datas_e_horarios = pd.date_range(start=data_antiga, end=data_recente, freq='15min') 
 
 df = pd.DataFrame({'DataHora': datas_e_horarios})
 
-df['hora'] = df['DataHora'].dt.floor('S').dt.time
+df['hora'] = df['DataHora'].dt.floor('s').dt.time
 hora = df['hora']
 
 df['data'] = df['DataHora'].dt.date
@@ -41,7 +41,7 @@ for h in hora:
     if irradiacao > 0:
         l_temperatura_painel.append(np.random.randint(40, 70))
         l_temperatura_ambiente.append(np.random.randint(24, 35))
-        l_status_painel.append(np.random.choice(["Operando...", "Falha"], p=[0.7, 0.3]))
+        l_status_painel.append(np.random.choice(["Operando...", "Falha"], p=[0.8, 0.2]))
     else:
         l_temperatura_painel.append(np.random.randint(20, 30))
         l_temperatura_ambiente.append(np.random.randint(13, 24))
@@ -54,6 +54,10 @@ df['temp_painel'] = l_temperatura_painel
 df['temp_ambiente'] = l_temperatura_ambiente
 df['status_painel'] = l_status_painel
 
+<<<<<<< HEAD
+=======
+df.drop_duplicates(subset=['data', 'hora'], inplace=True)
+>>>>>>> 9e264197fcc4282cde93d597a0ab27fa045e3f0b
 
 #  inserindo dados no MySQL
 
