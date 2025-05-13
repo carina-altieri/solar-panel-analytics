@@ -7,10 +7,10 @@ import criar_banco
 
 criar_banco.criar_bd()
 
-# Gerando histórico de dados dos últimos 30 dias, a cada 15 min
+# Gerando histórico de dados dos últimos 90 dias, a cada 15 min
 
 data_recente = datetime.now() 
-dias_para_subtrair = timedelta(days=30) 
+dias_para_subtrair = timedelta(days=90) 
 data_antiga = data_recente - dias_para_subtrair 
 
 datas_e_horarios = pd.date_range(start=data_antiga, end=data_recente, freq='15min') 
