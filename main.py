@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta 
-from db import get_connection
+from db_connection import get_connection
 import criar_banco
 
 
