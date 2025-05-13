@@ -54,11 +54,6 @@ df['temp_painel'] = l_temperatura_painel
 df['temp_ambiente'] = l_temperatura_ambiente
 df['status_painel'] = l_status_painel
 
-<<<<<<< HEAD
-=======
-df.drop_duplicates(subset=['data', 'hora'], inplace=True)
->>>>>>> 9e264197fcc4282cde93d597a0ab27fa045e3f0b
-
 #  inserindo dados no MySQL
 
 cnx = get_connection()
