@@ -2,6 +2,10 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta 
 from db import get_connection
+import criar_banco
+
+
+criar_banco.criar_bd()
 
 # Gerando histórico de dados dos últimos 30 dias, a cada 15 min
 
@@ -50,31 +54,16 @@ df['temp_painel'] = l_temperatura_painel
 df['temp_ambiente'] = l_temperatura_ambiente
 df['status_painel'] = l_status_painel
 
-print(df.head(5))
 
-
-# inserindo dados no MySQL
+#  inserindo dados no MySQL
 
 cnx = get_connection()
-cur = cnx.cursor()
-
-create_table = """
-CREATE TABLE IF NOT EXISTS monitoramento_solar (
-    id INT AUTO_INCREMENT PRIMARY KEY, 
-    data DATE NOT NULL, 
-    hora TIME NOT NULL,
-    irradiacao_solar FLOAT, 
-    temp_painel FLOAT, 
-    temp_ambiente FLOAT, 
-    status_painel VARCHAR(50)
-)
-"""
-cur.execute(create_table)
+cursor = cnx.cursor()
 
 for i, df_coluna in df.iterrows():
-    cur.execute(
+    cursor.execute(
         ''' 
-        INSERT INTO upx.monitoramento_solar(
+        INSERT INTO monitoramento_solar(
         data,
         hora,
         irradiacao_solar,
@@ -96,5 +85,5 @@ for i, df_coluna in df.iterrows():
 
 cnx.commit()
 
-cur.close()
+cursor.close()
 cnx.close()
