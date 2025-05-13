@@ -86,3 +86,7 @@ cnx.commit()
 
 cursor.close()
 cnx.close()
+
+# exportando os dados para .csv
+
+df.to_csv('dados_3_meses', index=False)
