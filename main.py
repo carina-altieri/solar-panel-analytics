@@ -1,19 +1,24 @@
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta 
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from db_connection import get_connection
 import criar_banco
 
 
 criar_banco.criar_bd()
 
-# Gerando histórico de dados dos últimos 90 dias, a cada 15 min
+# Gerando histórico de dados dos últimos 3 meses completos, a cada 15 min
 
-data_recente = datetime.now() 
-dias_para_subtrair = timedelta(days=90) 
-data_antiga = data_recente - dias_para_subtrair 
+data_atual = datetime.now()
+# alterando a data de hoje para o primeiro dia do mês atual 
+primeiro_dia_mes_atual = data_atual.replace(day=1) 
+# último dia do mês anterior
+data_final = primeiro_dia_mes_atual - relativedelta(days=1)
+# 3 meses antes do início do mês atual
+data_inicial = primeiro_dia_mes_atual - relativedelta(months=3)
 
-datas_e_horarios = pd.date_range(start=data_antiga, end=data_recente, freq='15min') 
+datas_e_horarios = pd.date_range(start=data_inicial, end=data_final, freq='15min') 
 
 df = pd.DataFrame({'DataHora': datas_e_horarios})
 
