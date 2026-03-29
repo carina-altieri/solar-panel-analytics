@@ -71,8 +71,7 @@ Desenvolver um pipeline de dados que:
 
 ### Pipeline
 
-* Simulação → Armazenamento → Exportação → Análise
-* Estrutura organizada e escalável
+* Simulação → Exportação (.csv) → Armazenamento (MySQL) → Análise
 
 ---
 
